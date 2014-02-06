@@ -11,35 +11,19 @@ public class SetupKeyspace {
 
 		Class.forName("org.apache.cassandra.cql.jdbc.CassandraDriver");
 
-		{
-			Connection con = DriverManager.getConnection("jdbc:cassandra://127.0.0.1:9160/system?version=3.0.0");
-			String createKeyspace = "DROP KEYSPACE IF EXISTS demo;";
-			PreparedStatement statement = con.prepareStatement(createKeyspace);
-			statement.execute();
-			statement.close();
-		}
-		{
-			Connection con = DriverManager.getConnection("jdbc:cassandra://127.0.0.1:9160/system?version=3.0.0");
-			String createKeyspace = "CREATE KEYSPACE demo WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};";
-			PreparedStatement statement = con.prepareStatement(createKeyspace);
-			statement.execute();
-			statement.close();
-		}
-
-		Connection con = DriverManager.getConnection("jdbc:cassandra://127.0.0.1:9160/demo?version=3.0.0");
-		{
-			String query = "CREATE TABLE user (user_id varchar, user_firstname varchar, PRIMARY KEY(user_id)) WITH COMPACT STORAGE;";
-			PreparedStatement statement = con.prepareStatement(query);
-			statement.execute();
-			statement.close();
-		}
-
-		{
-			String query = "CREATE TABLE tweet (user_id varchar, tweet_id varchar, author varchar, message varchar, PRIMARY KEY(user_id,tweet_id));";
-			PreparedStatement statement = con.prepareStatement(query);
-			statement.execute();
-			statement.close();
-		}
+		Connection systemCon = DriverManager.getConnection("jdbc:cassandra://127.0.0.1:9160/system?version=3.0.0");
+		executePreparedStatement(systemCon, "DROP KEYSPACE IF EXISTS demo;");
+		executePreparedStatement(systemCon, "CREATE KEYSPACE demo WITH replication = {'class':'SimpleStrategy', 'replication_factor':1};");
+		
+		Connection demoCon = DriverManager.getConnection("jdbc:cassandra://127.0.0.1:9160/demo?version=3.0.0");
+		executePreparedStatement(demoCon, "CREATE TABLE user (user_id varchar, user_firstname varchar, PRIMARY KEY(user_id)) WITH COMPACT STORAGE;");
+		executePreparedStatement(demoCon, "CREATE TABLE tweet (user_id varchar, tweet_id varchar, author varchar, message varchar, PRIMARY KEY(user_id,tweet_id));");
+	}
+	
+	private static void executePreparedStatement(Connection con, String query) throws SQLException, ClassNotFoundException {
+		PreparedStatement statement = con.prepareStatement(query);
+		statement.execute();
+		statement.close();
 	}
 
 }
