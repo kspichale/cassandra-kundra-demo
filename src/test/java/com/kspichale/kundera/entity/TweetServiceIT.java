@@ -17,7 +17,7 @@ import com.kspichale.kundera.service.TweetService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/spring/repository-context.xml" })
-public class KunderaIT {
+public class TweetServiceIT {
 
 	@Autowired
 	private TweetService service;

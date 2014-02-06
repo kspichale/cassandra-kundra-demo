@@ -22,7 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "/spring/repository-context.xml" })
-public class CreateColumnFamiliesIT {
+public class TweetEntityIT {
 
 	@BeforeClass
 	public static void createTablespace() throws SQLException, ClassNotFoundException {
