@@ -2,8 +2,10 @@ package com.kspichale.kundera.entity;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import java.sql.SQLException;
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,11 @@ public class KunderaIT {
 
 	@Autowired
 	private TweetService service;
+	
+	@BeforeClass
+	public static void createTablespace() throws SQLException, ClassNotFoundException {
+		SetupKeyspace.createNewKeyspace();
+	}
 
 	@Test
 	public void loadTweetsForUser() {

@@ -100,11 +100,6 @@
 			<version>2.3.19</version>
 		</dependency>
 
-		<!--dependency> <groupId>org.mongodb</groupId> <artifactId>mongo-java-driver</artifactId> 
-			<version>2.10.1</version> </dependency -->
-		<!--dependency> <groupId>org.springframework.data</groupId> <artifactId>spring-data-mongodb</artifactId> 
-			<version>1.2.0.RELEASE</version> </dependency -->
-
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
@@ -240,6 +235,45 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cassandra-maven-plugin</artifactId>
+				<version>2.0.0-1</version>
+				<executions>
+					<execution>
+						<id>delete-cassandra</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>delete</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>start-cassandra</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>start</goal>
+						</goals>
+						<configuration>
+							<listenAddress>${cassandra.listenAddress}</listenAddress>
+							<jmxPort>${cassandra.jmxPort}</jmxPort>
+							<rpcPort>${cassandra.rpcPort}</rpcPort>
+							<stopPort>${cassandra.stopPort}</stopPort>
+							<storagePort>${cassandra.storagePort}</storagePort>
+						</configuration>
+					</execution>
+					<execution>
+						<id>stop-cassandra</id>
+						<phase>post-integration-test</phase>
+						<goals>
+							<goal>stop</goal>
+						</goals>
+						<configuration>
+							<listenAddress>${cassandra.listenAddress}</listenAddress>
+							<stopPort>${cassandra.stopPort}</stopPort>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 	<profiles>
@@ -251,7 +285,7 @@
 			<properties>
 				<cassandra.jmxPort>7199</cassandra.jmxPort>
 				<cassandra.rpcPort>9160</cassandra.rpcPort>
-				<cassandra.stopPort>8081</cassandra.stopPort>
+				<cassandra.stopPort>8082</cassandra.stopPort>
 				<cassandra.storagePort>7000</cassandra.storagePort>
 			</properties>
 		</profile>
